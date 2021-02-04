@@ -5,6 +5,7 @@
 public class Yahtzee {
 
     public static void main(String[] args){
-
+        Hand h = new Hand();
+        h.printHand();
     }
 }
