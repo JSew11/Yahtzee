@@ -19,6 +19,16 @@ public class Hand {
             hand.add(new Die());
     }
 
+    // Method: newHand
+    // Description: Rolls every die in the hand
+    // Inputs: None
+    // Outputs:None
+    public void newHand(){
+        for(int i = 0; i < max_dice; ++i){
+            hand.get(i).rollDie();
+        }
+    }
+
     // Method: reRoll
     // Description: Re-rolls the hand of dice according to the input string.
     // Inputs: String of 'y' and 'n' chars that tell which Die objects should
@@ -86,5 +96,22 @@ public class Hand {
             // print the smallest value
             System.out.print(" " + hand.get(i).getValue());
         }
+        System.out.println();
+    }
+
+    // Method: dieAt
+    // Description: Returns the die at the given index
+    // Inputs: Index of desired die
+    // Outputs: Die at the given index
+    public Die dieAt(int index){
+        return hand.get(index);
+    }
+
+    // Method: getMax_dice
+    // Description: Returns maximum number of dice in the hand
+    // Inputs: None
+    // Outputs: Maximum number of dice in the hand
+    public int getMax_dice() {
+        return max_dice;
     }
 }
