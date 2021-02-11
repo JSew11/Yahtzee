@@ -6,11 +6,12 @@
 import java.util.Random;
 
 public class Die{
-    private int sides = 6; // Number of sides for the dice
+    private int sides; // Number of sides for the dice
     private int value;
 
     // constructor "rolls" the die
-    public Die(){
+    public Die(int numSides){
+        sides = numSides;
         rollDie();
     }
 

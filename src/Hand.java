@@ -11,12 +11,12 @@ public class Hand {
     private int max_dice;
 
     // constructor generates a hand of 5 dice by initiating the 5 Die objects
-    public Hand(){
-        max_dice = 5;
+    public Hand(int maxSides, int maxDice){
+        max_dice = maxDice;
         hand = new ArrayList<Die>();
 
         for(int i = 0; i < max_dice; ++i)
-            hand.add(new Die());
+            hand.add(new Die(maxSides));
     }
 
     // Method: newHand

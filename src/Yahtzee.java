@@ -7,7 +7,7 @@ import java.util.*;
 public class Yahtzee {
 
     public static void main(String[] args){
-        Hand h = new Hand();
+        Hand h = new Hand(6, 5);
         ScoreSheet s = new ScoreSheet(h);
         int max_rolls = 3; // max # of rolls in a turn
 
