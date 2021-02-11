@@ -34,31 +34,32 @@ public class Hand {
     // Inputs: String of 'y' and 'n' chars that tell which Die objects should
     // be re-rolled
     // Outputs: None
-    public boolean reRoll(){
-        Scanner in = new Scanner(System.in);
+    public int reRoll(String keep){
+        String keepAll = "yyyyy";
 
-        System.out.print("Enter which dice you want to keep (y or n): ");
-        String keep = in.nextLine();
-
+        // check if the player wants to keep all their dice
+        if(keep.equals(keepAll)){
+            return 0;
+        }
         // check for invalid input string size
         if(keep.length() < max_dice){
             System.out.println("Please input y or n for each die.");
-            return false;
+            return -1;
         }
-
         for(int i = 0; i  < max_dice; ++i){
             // check for invalid inputs
             if(keep.charAt(i) != 'y' && keep.charAt(i) != 'n'){
                 System.out.println("Invalid input for die " + i +
                         " (Please input y or n for each die).");
-                return false;
+                return -1;
             }
             // check if reRoll is needed
             else if(keep.charAt(i) == 'n'){
                 hand.get(i).rollDie();
             }
         }
-        return true;
+        // dice were re rolled successfully
+        return 1;
     }
 
     // Method: printHand

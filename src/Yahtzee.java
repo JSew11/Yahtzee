@@ -7,19 +7,34 @@ import java.util.*;
 public class Yahtzee {
 
     public static void main(String[] args){
-        Scanner in = new Scanner(System.in);
         Hand h = new Hand();
         ScoreSheet s = new ScoreSheet(h);
-        int cur_roll; // current roll in the turn
         int max_rolls = 3; // max # of rolls in a turn
+
+        round(max_rolls, h, s);
+    }
+
+    public static void round(int maxRolls, Hand h, ScoreSheet s){
+        Scanner in = new Scanner(System.in);
+        int cur_roll;
         char playOn = 'y';
 
         while(playOn == 'y'){
             cur_roll = 1;
             h.newHand();
             h.printHand();
-            while(cur_roll < max_rolls){
-                if(h.reRoll()) cur_roll++;
+
+            while(cur_roll < maxRolls){
+                System.out.print("Enter which dice you want to keep (y or n): ");
+                String keep = in.nextLine();
+
+                int reRoll = h.reRoll(keep);
+                if(reRoll == 1){
+                    cur_roll++;
+                }
+                else if(reRoll == 0){
+                    cur_roll = maxRolls;
+                }
                 h.printHand();
             }
             h.sortPrint();
