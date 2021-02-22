@@ -1,32 +1,42 @@
-// Joshua Seward
-// February 2, 2021
-// Description: A class representing a single die with a set number of sides. The
-// dice is "rolled" when it is created and the value is kept within it.
-
+/**
+ * This class represents a single die with a varying number of sides
+ * to be used in a game of Yahtzee.
+ * No sources to cite.
+ *
+ * @author Joshua Seward
+ * @version 2.1 2/21/21
+ */
 import java.util.Random;
 
 public class Die{
     private int sides; // Number of sides for the dice
     private int value;
 
-    // constructor "rolls" the die
+    /**
+     * Constructor that creates a new Die object with
+     * 'numSides' sides.
+     *
+     * @param numSides int for the number of sides of this
+     *                 particular die object
+     */
     public Die(int numSides){
         sides = numSides;
         rollDie();
     }
 
-    // Method: getValue
-    // Description: Return the value in the die
-    // Inputs: None
-    // Outputs: The value stored in the die
+    /**
+     * Getter for the value of a die
+     *
+     * @@return value of the die object
+     */
     public int getValue(){
         return value;
     }
 
-    // Method: reRoll
-    // Description: Randomize the value in the die ("roll" the die)
-    // Inputs: None
-    // Outputs: None
+    /**
+     * Rolls the die by selecting a random value between
+     * 1 and the number of sides of the die.
+     */
     public void rollDie(){
         Random rand = new Random();
         value = rand.nextInt(sides)+1;

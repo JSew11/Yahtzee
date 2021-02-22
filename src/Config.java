@@ -1,8 +1,13 @@
-// Joshua Seward
-// February 21, 2021
-// Description: Reads a configuration file and prompts the
-// user to update the number of dice, number of sides per die,
-// and number of rolls per round in a yahtzee game.
+/**
+ * This class reads the settings from an external config file and
+ * changes the settings of the game accordingly. It also prompts
+ * the user if they would like to change these settings, and if
+ * so, the changes are saved to the config file.
+ * No sources to cite.
+ *
+ * @author Joshua Seward
+ * @version 2.1 2/21/21
+ */
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -13,7 +18,14 @@ public class Config {
     private int die_sides;
     private int num_dice;
     private int rolls_per_round;
-
+    /**
+     * Constructor that creates a new Config object using the
+     * data of a provided config file, and changes the config
+     * settings within the file if the user chooses.
+     *
+     * @param filename String containing the name of the config
+     *                 file
+     */
     public Config(String filename){
         Scanner in = new Scanner(System.in);
         getConfig(filename);
@@ -22,10 +34,12 @@ public class Config {
         if(cont.equals("y")){ setConfig(filename, in);}
     }
 
-    // Method: getConfig
-    // Description: Gets the config settings from an external file.
-    // Inputs: Config file filename
-    // Outputs:None
+    /**
+     * Reads the settings from the given config file
+     *
+     * @param filename String containing the name of the config
+     *                 file
+     */
     private void getConfig(String filename){
         try{
             Scanner inFile = new Scanner(new File(filename));
@@ -42,11 +56,14 @@ public class Config {
         }
     }
 
-    // Method: setConfig
-    // Description: Reads inputs from the user and updates the config file
-    // to the desired settings.
-    // Inputs: Config file filename / command prompt scanner
-    // Outputs:None
+    /**
+     * CHanges the settings contained in the config file
+     *
+     * @param filename String containing the name of the
+     *                 config file
+     * @param in Scanner to read the input from the command
+     *           prompt
+     */
     private void setConfig(String filename, Scanner in){
         try{
             // read input from console
@@ -67,26 +84,32 @@ public class Config {
         }
     }
 
-    // Method: getDie_sides
-    // Description: Returns number of sides of each die
-    // Inputs: None
-    // Outputs: Returns number of sides for each die
+    /**
+     * Getter for the number of sides for a die
+     *
+     * @return number of sides for a die (stored in
+     *         the config file)
+     */
     public int getDie_sides() {
         return die_sides;
     }
 
-    // Method: getNum_dice
-    // Description: Returns number of dice in one hand
-    // Inputs: None
-    // Outputs: Returns number of dice in one hand
+    /**
+     * Getter for the number of dice in a hand
+     *
+     * @@return number of dice in a hand (stored in
+     *          the config file)
+     */
     public int getNum_dice() {
         return num_dice;
     }
 
-    // Method: getRolls_per_round
-    // Description: Returns number of rolls in a round
-    // Inputs: None
-    // Outputs: Returns number of rolls in a round
+    /**
+     * Getter for the number of rolls per round
+     *
+     * @@return number of rolls per round (stored
+     *          in the config file)
+     */
     public int getRolls_per_round() {
         return rolls_per_round;
     }

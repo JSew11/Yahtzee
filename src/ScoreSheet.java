@@ -1,14 +1,33 @@
-// Joshua Seward
-// February 2, 2021
-// Description: Representation of a Yahtzee score sheet.
+/**
+ * This class computes the values for a score sheet in a game
+ * of Yahtzee. It automatically is updated for dice with more
+ * or less than 6 sides.
+ * No sources to cite.
+ *
+ * @author Joshua Seward
+ * @version 2.1 2/21/21
+ */
 
 public class ScoreSheet {
     private int possibleScore[];
     private int actualScore[];
     private Hand hand;
-    int sheetLength = 13;
+    private Config c;
+    private int sheetLength;
 
-    public ScoreSheet(Hand h){
+    /**
+     * Constructor that creates a new ScoreSheet object
+     * and uses the given Hand and Config objects to
+     * calculate and store the players' scores.
+     *
+     * @param h Hand object that contains the dice for
+     *          calculating the scores
+     * @param c Config object that contain the settings
+     *          for the game
+     */
+    public ScoreSheet(Hand h, Config c){
+        this.c = c;
+        sheetLength = c.getDie_sides() + 7;
         possibleScore = new int[sheetLength];
         actualScore = new int[sheetLength];
         hand = h;
@@ -19,37 +38,33 @@ public class ScoreSheet {
         }
     }
 
-    // Method: printPossibleSheet
-    // Description: Calculates and prints scores for PossibleSheet
-    // Inputs: None
-    // Outputs: None
+    /**
+     * Method that calculates and prints the possible
+     * scores for the current hand.
+     */
     public void possibleScore(){
         // calculate possible scores
         pScoreCalc();
         // print upper section
         System.out.println("-- Upper Section --");
-        System.out.println("1's line Score: " + possibleScore[0]);
-        System.out.println("2's line Score: " + possibleScore[1]);
-        System.out.println("3's line Score: " + possibleScore[2]);
-        System.out.println("4's line Score: " + possibleScore[3]);
-        System.out.println("5's line Score: " + possibleScore[4]);
-        System.out.println("6's line Score: " + possibleScore[5]);
+        for(int i = 0; i < c.getDie_sides(); ++i){
+            System.out.println((i+1) + "'s line Score: " + possibleScore[i]);
+        }
         // print lower section
         System.out.println("-- Lower Section --");
-        System.out.println("Three in a Row line Score: " + possibleScore[6]);
-        System.out.println("Four in a Row line Score: " + possibleScore[7]);
-        System.out.println("Full House line Score: " + possibleScore[8]);
-        System.out.println("Small Straight line Score: " + possibleScore[9]);
-        System.out.println("Large Straight line Score: " + possibleScore[10]);
-        System.out.println("YAHTZEE line Score: " + possibleScore[11]);
-        System.out.println("Chance line Score: " + possibleScore[12]);
+        System.out.println("Three of a Kind line Score: " + possibleScore[c.getDie_sides()]);
+        System.out.println("Four of a Kind line Score: " + possibleScore[c.getDie_sides() + 1]);
+        System.out.println("Full House line Score: " + possibleScore[c.getDie_sides() + 2]);
+        System.out.println("Small Straight line Score: " + possibleScore[c.getDie_sides() + 3]);
+        System.out.println("Large Straight line Score: " + possibleScore[c.getDie_sides() + 4]);
+        System.out.println("YAHTZEE line Score: " + possibleScore[c.getDie_sides() + 5]);
+        System.out.println("Chance line Score: " + possibleScore[c.getDie_sides() + 6]);
     }
 
-    // Method: pScoreCalc
-    // Description: Calculates the possible score combinations for the current
-    // hand and updates possibleScore
-    // Inputs: None
-    // Outputs: None
+    /**
+     * Method that calculates the possible scores for
+     * the current hand.
+     */
     private void pScoreCalc(){
         // calculate the upper section scores (number lines)
         numCalc();
@@ -59,17 +74,17 @@ public class ScoreSheet {
         fullHouseCalc();
         smallStraightCalc();
         largeStraightCalc();
-        yahtzeeCalc();
+        if(yahtzeeCalc()) possibleScore[c.getDie_sides()+5] = 50;
         chanceCalc();
     }
 
-    // Method: numCalc
-    // Description: Calculates the possible score combinations for the number
-    // lines and updates possibleScore
-    // Inputs: None
-    // Outputs: None
+    /**
+     * Method that calculates the scores for each of the
+     * "number" lines of the ScoreSheet based on the
+     * current hand.
+     */
     private void numCalc(){
-        for(int i = 0; i < 6; ++i){
+        for(int i = 0; i < c.getDie_sides(); ++i){
             int sum = 0;
             for(int j = 0; j < hand.getMax_dice(); ++j) {
                 if (hand.dieAt(j).getValue() == i+1)
@@ -82,10 +97,10 @@ public class ScoreSheet {
         }
     }
 
-    // Method: threeKindCalc
-    // Description: Checks hand for a 3 of a kind and updates possibleScore
-    // Inputs: None
-    // Outputs: None
+    /**
+     * Method that calculates the score if there is a three
+     * of a kind in the current hand.
+     */
     private void threeKindCalc(){
         int sum = 0;
         for(int i = 0; i < hand.getMax_dice()-2; ++i){
@@ -99,16 +114,16 @@ public class ScoreSheet {
                 }
             }
         }
-        if(actualScore[6] == -1)
-            possibleScore[6] = sum;
+        if(actualScore[c.getDie_sides()] == -1)
+            possibleScore[c.getDie_sides()] = sum;
         else
-            possibleScore[6] = -1;
+            possibleScore[c.getDie_sides()] = -1;
     }
 
-    // Method: fourKindCalc
-    // Description: Checks hand for a 4 of a kind and updates possibleScore
-    // Inputs: None
-    // Outputs: None
+    /**
+     * Method that calculates the score if there is a four
+     * of a kind in the current hand.
+     */
     private void fourKindCalc(){
         int sum = 0;
         for(int i = 0; i < hand.getMax_dice()-3; ++i){
@@ -124,110 +139,110 @@ public class ScoreSheet {
                 }
             }
         }
-        if(actualScore[7] == -1)
-            possibleScore[7] = sum;
+        if(actualScore[c.getDie_sides()+1] == -1)
+            possibleScore[c.getDie_sides()+1] = sum;
         else
-            possibleScore[7] = -1;
+            possibleScore[c.getDie_sides()+1] = -1;
     }
 
-    // Method: fullHouseCalc
-    // Description: Checks hand for a full house and updates possibleScore
-    // Inputs: None
-    // Outputs: None
+    /**
+     * Method that calculates the score if there is a full
+     * house in the current hand.
+     */
     private void fullHouseCalc(){
         // check for the "3 - 2" case
         if(hand.dieAt(0).getValue() == hand.dieAt(1).getValue() &&
                 hand.dieAt(0).getValue() == hand.dieAt(2).getValue() &&
                 hand.dieAt(3).getValue() == hand.dieAt(4).getValue()){
-            if(actualScore[8] == -1)
-                possibleScore[8] = 25;
+            if(actualScore[c.getDie_sides()+2] == -1)
+                possibleScore[c.getDie_sides()+2] = 25;
             else
-                possibleScore[8] = -1;
+                possibleScore[c.getDie_sides()+2] = -1;
         }
         // check for the "2 - 3" case
         else if(hand.dieAt(0).getValue() == hand.dieAt(1).getValue() &&
                 hand.dieAt(2).getValue() == hand.dieAt(3).getValue() &&
                 hand.dieAt(2).getValue() == hand.dieAt(4).getValue()){
-            if(actualScore[8] == -1)
-                possibleScore[8] = 25;
+            if(actualScore[c.getDie_sides()+2] == -1)
+                possibleScore[c.getDie_sides()+2] = 25;
             else
-                possibleScore[8] = -1;
+                possibleScore[c.getDie_sides()+2] = -1;
         }
     }
 
-    // Method: smallStraightCalc
-    // Description: Checks hand for a small straight and updates possibleScore
-    // Inputs: None
-    // Outputs: None
+    /**
+     * Method that calculates the score if there is a small
+     * straight in the current hand.
+     */
     private void smallStraightCalc(){
         // check for the "first-4" case
         if(hand.dieAt(0).getValue() == hand.dieAt(1).getValue()-1 &&
                 hand.dieAt(1).getValue() == hand.dieAt(2).getValue()-1 &&
                 hand.dieAt(2).getValue() == hand.dieAt(3).getValue()-1){
-            if(actualScore[9] == -1)
-                possibleScore[9] = 30;
+            if(actualScore[c.getDie_sides()+3] == -1)
+                possibleScore[c.getDie_sides()+3] = 30;
             else
-                possibleScore[9] = -1;
+                possibleScore[c.getDie_sides()+3] = -1;
         }
         // check for the "last-4" case
         else if(hand.dieAt(1).getValue() == hand.dieAt(2).getValue()-1 &&
                 hand.dieAt(2).getValue() == hand.dieAt(3).getValue()-1 &&
                 hand.dieAt(3).getValue() == hand.dieAt(4).getValue()-1){
-            if(actualScore[9] == -1)
-                possibleScore[9] = 30;
+            if(actualScore[c.getDie_sides()+3] == -1)
+                possibleScore[c.getDie_sides()+3] = 30;
             else
-                possibleScore[9] = -1;
+                possibleScore[c.getDie_sides()+3] = -1;
         }
     }
 
-    // Method: largeStraightCalc
-    // Description: Checks hand for a large straight and updates possibleScore
-    // Inputs: None
-    // Outputs: None
+    /**
+     * Method that calculates the score if there is a large
+     * straight in the current hand.
+     */
     private void largeStraightCalc(){
         if(hand.dieAt(0).getValue() == hand.dieAt(1).getValue()-1 &&
                 hand.dieAt(1).getValue() == hand.dieAt(2).getValue()-1 &&
                 hand.dieAt(2).getValue() == hand.dieAt(3).getValue()-1 &&
                 hand.dieAt(3).getValue() == hand.dieAt(4).getValue()-1){
-            if(actualScore[10] == -1)
-                possibleScore[10] = 40;
+            if(actualScore[c.getDie_sides()+4] == -1)
+                possibleScore[c.getDie_sides()+4] = 40;
             else
-                possibleScore[10] = -1;
+                possibleScore[c.getDie_sides()+4] = -1;
         }
     }
 
-    // Method: yahtzeeCalc
-    // Description: Checks hand for a Yahtzee and and updates possibleScore
-    // Inputs: None
-    // Outputs: None
-    private void yahtzeeCalc(){
-        if(hand.dieAt(0).getValue() == hand.dieAt(1).getValue() &&
-                hand.dieAt(0).getValue() == hand.dieAt(2).getValue() &&
-                hand.dieAt(0).getValue() == hand.dieAt(3).getValue() &&
-                hand.dieAt(0).getValue() == hand.dieAt(4).getValue()){
-            if(actualScore[11] == -1)
-                possibleScore[11] = 50;
-            else
-                possibleScore[11] = -1;
+    /**
+     * Method that determines whether the current hand is a yahtzee.
+     *
+     * @return boolean value that says whether or not the current
+     *         hand is a yahtzee
+     */
+    private boolean yahtzeeCalc() {
+        int val = hand.dieAt(0).getValue();
+        for (int i = 1; i < c.getNum_dice(); ++i) {
+            if (val != hand.dieAt(i).getValue()) return false;
         }
+        return true;
     }
 
-    // Method: chanceCalc
-    // Description: Calculates Chance score and updates possibleScore
-    // Inputs: None
-    // Outputs: None
+    /**
+     * Method that calculates the score for the chance line of the
+     * ScoreSheet.
+     */
     public void chanceCalc(){
         int sum = sumHand();
-        if(actualScore[12] == -1)
-            possibleScore[12] = sum;
+        if(actualScore[c.getDie_sides()+6] == -1)
+            possibleScore[c.getDie_sides()+6] = sum;
         else
-            possibleScore[12] = -1;
+            possibleScore[c.getDie_sides()+6] = -1;
     }
 
-    // Method: sumHand
-    // Description: Returns the sum of all the dice in the hand
-    // Inputs: None
-    // Outputs: Returns the sum of all the dice in the hand
+    /**
+     * Method that adds all the dice in the current hand.
+     *
+     * @return int value that is the sum of all the dice in the
+     *         current hand
+     */
     private int sumHand(){
         int sum = 0;
         for(int i = 0; i < hand.getMax_dice(); ++i){

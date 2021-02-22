@@ -1,20 +1,38 @@
-// Joshua Seward
-// February 2, 2021
-// Description: Main file for the full "Yahtzee" game simulation.
+/**
+ * This class runs a game of Yahtzee using the settings from
+ * an external config file.
+ * No sources to cite.
+ *
+ * @author Joshua Seward
+ * @version 2.1 2/21/21
+ */
 
 import java.util.*;
 
 public class Yahtzee {
-
+    /**
+     * Required main function for the whole program.
+     *
+     * @param args String array of arguments
+     */
     public static void main(String[] args){
-        Hand h = new Hand(6, 5);
-        ScoreSheet s = new ScoreSheet(h);
-        int max_rolls = 3; // max # of rolls in a turn
+        Config c = new Config("..\\yahtzeeConfig.txt");
+        Hand h = new Hand(c);
+        ScoreSheet s = new ScoreSheet(h, c);
 
-        round(max_rolls, h, s);
+        turn(c.getRolls_per_round(), h, s);
     }
 
-    public static void round(int maxRolls, Hand h, ScoreSheet s){
+    /**
+     * Method for one turn of a game of Yahtzee
+     *
+     * @param maxRolls int that shows the max number of rolls
+     *                 in a hand
+     * @param h Hand object that is being used for the current turn
+     * @param s Scoresheet object that tracks the scoring for the
+     *          current turn
+     */
+    public static void turn(int maxRolls, Hand h, ScoreSheet s){
         Scanner in = new Scanner(System.in);
         int cur_roll;
         char playOn = 'y';

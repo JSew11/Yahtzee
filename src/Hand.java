@@ -1,41 +1,63 @@
-// Joshua Seward
-// February 2, 2021
-// Description: Representation of a hand in yahtzee (a set of 5 dice).
+/**
+ * This class takes a variable number of dice and forms a hand
+ * for the game Yahtzee. It can reRoll, print, and sort the hand
+ * to be used in the other aspects of the game.
+ * No sources to cite.
+ *
+ * @author Joshua Seward
+ * @version 2.1 2/21/21
+ */
 
 import java.util.ArrayList;
-import java.util.*;
-
 
 public class Hand {
     private ArrayList<Die> hand;
     private int max_dice;
+    private Config c;
 
-    // constructor generates a hand of 5 dice by initiating the 5 Die objects
-    public Hand(int maxSides, int maxDice){
-        max_dice = maxDice;
+    /**
+     * Constructor that creates a new Hand object by adding a
+     * variable number of dice with a variable number of sides
+     * (determined buy the config file).
+     *
+     * @param c Config object containing the settings for the
+     *          current game
+     */
+    public Hand(Config c){
+        this.c = c;
+        max_dice = c.getNum_dice();
         hand = new ArrayList<Die>();
 
         for(int i = 0; i < max_dice; ++i)
-            hand.add(new Die(maxSides));
+            hand.add(new Die(c.getDie_sides()));
     }
 
-    // Method: newHand
-    // Description: Rolls every die in the hand
-    // Inputs: None
-    // Outputs:None
+    /**
+     * Method that rolls each die in the hand.
+     */
     public void newHand(){
         for(int i = 0; i < max_dice; ++i){
             hand.get(i).rollDie();
         }
     }
 
-    // Method: reRoll
-    // Description: Re-rolls the hand of dice according to the input string.
-    // Inputs: String of 'y' and 'n' chars that tell which Die objects should
-    // be re-rolled
-    // Outputs: None
+    /**
+     * Method that re-rolls specific dice in a hand according to
+     * the input string.
+     *
+     * @param keep String that is used to determine which dice
+     *             to re-roll
+     * @return int value that reflects the different "states" of
+     *         the re-roll:
+     *            0 = player wants to keep all of their dice
+     *           -1 = invalid input of reRoll string
+     *            1 = dice were re-rolled successfully
+     */
     public int reRoll(String keep){
-        String keepAll = "yyyyy";
+        String keepAll = "";
+        for(int i = 0; i < max_dice; ++i){
+            keepAll = keepAll + "y";
+        }
 
         // check if the player wants to keep all their dice
         if(keep.equals(keepAll)){
@@ -62,10 +84,10 @@ public class Hand {
         return 1;
     }
 
-    // Method: printHand
-    // Description: Prints the values of the dice in the Hand
-    // Inputs: None
-    // Outputs: None
+    /**
+     * Method that prints the values of the dice in the
+     * hand to the console
+     */
     public void printHand(){
         System.out.print("Your roll was:");
         for(int i = 0; i < max_dice; ++i){
@@ -74,10 +96,10 @@ public class Hand {
         System.out.println();
     }
 
-    // Method: sortPrint
-    // Description: Sorts then prints the values of the dice in the Hand
-    // Inputs: None
-    // Outputs: None
+    /**
+     * Method that sorts then prints the dice in the hand
+     * according to their values
+     */
     public void sortPrint(){
         System.out.print("Sorted Hand:");
         // sort through the hand, printing the smallest each pass
@@ -100,18 +122,24 @@ public class Hand {
         System.out.println();
     }
 
-    // Method: dieAt
-    // Description: Returns the die at the given index
-    // Inputs: Index of desired die
-    // Outputs: Die at the given index
+    /**
+     * Method that returns the Die object at a given index of
+     * the current hand object
+     *
+     * @param index String containing the name of the config
+     *                 file
+     * @return Die object at the given index
+     */
     public Die dieAt(int index){
         return hand.get(index);
     }
 
-    // Method: getMax_dice
-    // Description: Returns maximum number of dice in the hand
-    // Inputs: None
-    // Outputs: Maximum number of dice in the hand
+    /**
+     * Getter method for the max number of dice in the hand
+     *
+     * @return int value for the maximum number of dice in the
+     * current hand
+     */
     public int getMax_dice() {
         return max_dice;
     }
