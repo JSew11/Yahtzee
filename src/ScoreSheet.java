@@ -5,37 +5,34 @@
  * No sources to cite.
  *
  * @author Joshua Seward
- * @version 2.1 2/21/21
+ * @version 3.0 3/7/21
  */
 
 public class ScoreSheet {
-    private int possibleScore[];
-    private int actualScore[];
+    private UpperSection possibleUpper;
+    private LowerSection possibleLower;
+    private UpperSection actualUpper;
+    private LowerSection actualLower;
     private Hand hand;
-    private Config c;
-    private int sheetLength;
+    private Config config;
 
     /**
      * Constructor that creates a new ScoreSheet object
      * and uses the given Hand and Config objects to
      * calculate and store the players' scores.
      *
-     * @param h Hand object that contains the dice for
-     *          calculating the scores
-     * @param c Config object that contain the settings
-     *          for the game
+     * @param hand - Hand object that contains the dice for
+     *               calculating the scores
+     * @param config - Config object that contain the settings
+     *                 for the game
      */
-    public ScoreSheet(Hand h, Config c){
-        this.c = c;
-        sheetLength = c.getDie_sides() + 7;
-        possibleScore = new int[sheetLength];
-        actualScore = new int[sheetLength];
-        hand = h;
-
-        for(int i = 0; i < sheetLength; ++i){
-            possibleScore[i] = 0;
-            actualScore[i] = -1;
-        }
+    public ScoreSheet(Hand hand, Config config){
+        this.hand = hand;
+        this.config = config;
+        possibleUpper = new UpperSection(hand, config);
+        possibleLower = new LowerSection(hand, config);
+        actualUpper = new UpperSection(hand, config);
+        actualLower = new LowerSection(hand, config);
     }
 
     /**
@@ -43,58 +40,7 @@ public class ScoreSheet {
      * scores for the current hand.
      */
     public void possibleScore(){
-        // calculate possible scores
-        pScoreCalc();
-        // print upper section
-        System.out.println("-- Upper Section --");
-        for(int i = 0; i < c.getDie_sides(); ++i){
-            System.out.println((i+1) + "'s line Score: " + possibleScore[i]);
-        }
-        // print lower section
-        System.out.println("-- Lower Section --");
-        System.out.println("Three of a Kind line Score: " + possibleScore[c.getDie_sides()]);
-        System.out.println("Four of a Kind line Score: " + possibleScore[c.getDie_sides() + 1]);
-        System.out.println("Full House line Score: " + possibleScore[c.getDie_sides() + 2]);
-        System.out.println("Small Straight line Score: " + possibleScore[c.getDie_sides() + 3]);
-        System.out.println("Large Straight line Score: " + possibleScore[c.getDie_sides() + 4]);
-        System.out.println("YAHTZEE line Score: " + possibleScore[c.getDie_sides() + 5]);
-        System.out.println("Chance line Score: " + possibleScore[c.getDie_sides() + 6]);
-    }
-
-    /**
-     * Method that calculates the possible scores for
-     * the current hand.
-     */
-    private void pScoreCalc(){
-        // calculate the upper section scores (number lines)
-        numCalc();
-        // calculate the lower section scores
-        threeKindCalc();
-        fourKindCalc();
-        fullHouseCalc();
-        smallStraightCalc();
-        largeStraightCalc();
-        if(yahtzeeCalc()) possibleScore[c.getDie_sides()+5] = 50;
-        chanceCalc();
-    }
-
-    /**
-     * Method that calculates the scores for each of the
-     * "number" lines of the ScoreSheet based on the
-     * current hand.
-     */
-    private void numCalc(){
-        for(int i = 0; i < c.getDie_sides(); ++i){
-            int sum = 0;
-            for(int j = 0; j < hand.getMax_dice(); ++j) {
-                if (hand.dieAt(j).getValue() == i+1)
-                    sum += i+1;
-            }
-            if(actualScore[i] == -1)
-                possibleScore[i] = sum;
-            else
-                possibleScore[i] = -1;
-        }
+        possibleUpper.calcScores();
     }
 
     /**
@@ -229,7 +175,7 @@ public class ScoreSheet {
      * Method that calculates the score for the chance line of the
      * ScoreSheet.
      */
-    public void chanceCalc(){
+    private void chanceCalc(){
         int sum = sumHand();
         if(actualScore[c.getDie_sides()+6] == -1)
             possibleScore[c.getDie_sides()+6] = sum;

@@ -35,7 +35,7 @@ public class Config {
     }
 
     /**
-     * Reads the settings from the given config file
+     * Method that reads the settings from the given config file
      *
      * @param filename String containing the name of the config
      *                 file
@@ -57,7 +57,7 @@ public class Config {
     }
 
     /**
-     * CHanges the settings contained in the config file
+     * Method that changes the settings contained in the config file
      *
      * @param filename String containing the name of the
      *                 config file
