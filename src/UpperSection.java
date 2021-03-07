@@ -55,15 +55,28 @@ public class UpperSection {
      * @param line - the line to set the score in
      * @param score - the score to set at the given line
      */
-    public void setScore(int line, int score){ upperSection[line] = score;}
+    public void setScore(int line, int score){
+        if(line >= 0 && line < length)
+            upperSection[line] = score;
+        else System.out.println("Invalid Upper Section line (please enter 0-"
+                                + (length-1) + ")");
+    }
 
     /**
      * Method that gives the score at the desired line
      *
      * @param line - the line you want the score at
-     * @return - the score at the input line
+     * @return - the score at the given line
      */
-    public int getScore(int line){ return upperSection[line];}
+    public int getScore(int line){
+        if(line >= 0 && line < length)
+            return upperSection[line];
+        else {
+            System.out.println("Invalid Lower Section line (please enter 0-"
+                    + (length+-1) + ")");
+            return -1;
+        }
+    }
 
     /**
      * Method that returns the length of the upper section

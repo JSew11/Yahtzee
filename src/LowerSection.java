@@ -8,7 +8,7 @@
  */
 
 public class LowerSection {
-    private int length;
+    private int length = 7;
     private Hand hand;
     private Config config;
     private int lowerSection[];
@@ -26,9 +26,187 @@ public class LowerSection {
     public LowerSection(Hand hand, Config config){
         this.hand = hand;
         this.config = config;
-        // initialize the length variable
-        // initialize the lowerSection array to have length as its size
         lowerSection = new int[length];
     }
 
+    /**
+     * Method that calculates the lower section scores for the
+     * current hand.
+     */
+    public void calcScores(){
+        threeKindCalc();
+        fourKindCalc();
+        fullHouseCalc();
+        smallStraightCalc();
+        largeStraightCalc();
+        if(yahtzeeCalc()) lowerSection[5] = 50;
+        else lowerSection[5] = 0;
+        chanceCalc();
+    }
+
+    /**
+     * Method that sets the score for a specific line of the
+     * upper section.
+     *
+     * @param line - the line to set the score in
+     * @param score - the score to set at the given line
+     */
+    public void setScore(int line, int score){
+        if(line >= 0 && line < length)
+            lowerSection[line] = score;
+        else System.out.println("Invalid Lower Section line (please enter 0-"
+                                + (length-1) + ")");
+    }
+
+    /**
+     * Method that gives the score at the desired line
+     *
+     * @param line - the line you want the score at
+     * @return - the score at the given line
+     */
+    public int getScore(int line){
+        if(line >= 0 && line < length)
+            return lowerSection[line];
+        else{
+            System.out.println("Invalid Lower Section line (please enter 0-"
+                               + (length-1) + ")");
+            return -1;
+        }
+    }
+
+    /**
+     * Method that returns the length of the upper section
+     *
+     * @return - returns the length of the upper section
+     */
+    public int getLength(){ return length;}
+
+    /**
+     * Method that calculates the score if there is a three
+     * of a kind in the current hand.
+     */
+    private void threeKindCalc(){
+        int sum = 0;
+        for(int i = 0; i < hand.getMax_dice()-2; ++i){
+            Die d1 = hand.dieAt(i);
+            for(int j = i+1; j < hand.getMax_dice()-1; ++j){
+                Die d2 = hand.dieAt(j);
+                Die d3 = hand.dieAt(j+1);
+                if(d1.getValue() == d2.getValue() &&
+                   d1.getValue() == d3.getValue()){
+                    sum = sumHand();
+                }
+            }
+        }
+        lowerSection[0] = sum;
+    }
+
+    /**
+     * Method that calculates the score if there is a four
+     * of a kind in the current hand.
+     */
+    private void fourKindCalc(){
+        int sum = 0;
+        for(int i = 0; i < hand.getMax_dice()-3; ++i){
+            Die d1 = hand.dieAt(i);
+            for(int j = i+1; j < hand.getMax_dice()-2; ++j){
+                Die d2 = hand.dieAt(j);
+                Die d3 = hand.dieAt(j+1);
+                Die d4 = hand.dieAt(j+2);
+                if(d1.getValue() == d2.getValue() &&
+                        d1.getValue() == d3.getValue() &&
+                        d1.getValue() == d4.getValue()){
+                    sum = sumHand();
+                }
+            }
+        }
+        lowerSection[1] = sum;
+    }
+
+    /**
+     * Method that calculates the score if there is a full
+     * house in the current hand.
+     */
+    private void fullHouseCalc(){
+        // check for the "3 - 2" case
+        if(hand.dieAt(0).getValue() == hand.dieAt(1).getValue() &&
+                hand.dieAt(0).getValue() == hand.dieAt(2).getValue() &&
+                hand.dieAt(3).getValue() == hand.dieAt(4).getValue()){
+            lowerSection[2] = 25;
+        }
+        // check for the "2 - 3" case
+        else if(hand.dieAt(0).getValue() == hand.dieAt(1).getValue() &&
+                hand.dieAt(2).getValue() == hand.dieAt(3).getValue() &&
+                hand.dieAt(2).getValue() == hand.dieAt(4).getValue()){
+            lowerSection[2] = 25;
+        }
+    }
+
+    /**
+     * Method that calculates the score if there is a small
+     * straight in the current hand.
+     */
+    private void smallStraightCalc(){
+        // check for the "first-4" case
+        if(hand.dieAt(0).getValue() == hand.dieAt(1).getValue()-1 &&
+                hand.dieAt(1).getValue() == hand.dieAt(2).getValue()-1 &&
+                hand.dieAt(2).getValue() == hand.dieAt(3).getValue()-1){
+            lowerSection[3] = 30;
+        }
+        // check for the "last-4" case
+        else if(hand.dieAt(1).getValue() == hand.dieAt(2).getValue()-1 &&
+                hand.dieAt(2).getValue() == hand.dieAt(3).getValue()-1 &&
+                hand.dieAt(3).getValue() == hand.dieAt(4).getValue()-1){
+            lowerSection[3] = 30;
+        }
+    }
+
+    /**
+     * Method that calculates the score if there is a large
+     * straight in the current hand.
+     */
+    private void largeStraightCalc(){
+        if(hand.dieAt(0).getValue() == hand.dieAt(1).getValue()-1 &&
+                hand.dieAt(1).getValue() == hand.dieAt(2).getValue()-1 &&
+                hand.dieAt(2).getValue() == hand.dieAt(3).getValue()-1 &&
+                hand.dieAt(3).getValue() == hand.dieAt(4).getValue()-1){
+            lowerSection[4] = 40;
+        }
+    }
+
+    /**
+     * Method that determines whether the current hand is a yahtzee.
+     *
+     * @return boolean value that says whether or not the current
+     *         hand is a yahtzee
+     */
+    private boolean yahtzeeCalc() {
+        int val = hand.dieAt(0).getValue();
+        for (int i = 1; i < config.getNum_dice(); ++i) {
+            if (val != hand.dieAt(i).getValue()) return false;
+        }
+        return true;
+    }
+
+    /**
+     * Method that calculates and updates the chance line for the
+     * lower section of a Yahtzee ScoreSheet
+     */
+    private void chanceCalc(){
+        lowerSection[6] = sumHand();
+    }
+
+    /**
+     * Method that adds all the dice in the current hand.
+     *
+     * @return int value that is the sum of all the dice in the
+     *         current hand
+     */
+    private int sumHand(){
+        int sum = 0;
+        for(int i = 0; i < hand.getMax_dice(); ++i){
+            sum += hand.dieAt(i).getValue();
+        }
+        return sum;
+    }
 }
