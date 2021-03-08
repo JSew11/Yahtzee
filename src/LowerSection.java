@@ -177,19 +177,6 @@ public class LowerSection {
                 hand.dieAt(3).getValue() == hand.dieAt(4).getValue()-1){
             lowerSection[3] = 30;
         }
-        // cases where two dice are the same within the straight
-        else if(hand.dieAt(0).getValue() == hand.dieAt(1).getValue()-1 &&
-                hand.dieAt(1).getValue() == hand.dieAt(2).getValue() &&
-                hand.dieAt(2).getValue() == hand.dieAt(3).getValue()-1 &&
-                hand.dieAt(3).getValue() == hand.dieAt(4).getValue()-1){
-            lowerSection[3] = 30;
-        }
-        else if(hand.dieAt(0).getValue() == hand.dieAt(1).getValue()-1 &&
-                hand.dieAt(1).getValue() == hand.dieAt(2).getValue()-1 &&
-                hand.dieAt(2).getValue() == hand.dieAt(3).getValue() &&
-                hand.dieAt(3).getValue() == hand.dieAt(4).getValue()-1) {
-            lowerSection[3] = 30;
-        }
     }
 
     /**

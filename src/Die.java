@@ -27,7 +27,7 @@ public class Die{
     /**
      * Getter for the value of a die
      *
-     * @@return value of the die object
+     * @return value of the die object
      */
     public int getValue(){
         return value;

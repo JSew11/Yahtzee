@@ -71,11 +71,11 @@ public class Config {
             // read input from console
             PrintStream outFile = new PrintStream(new File(filename));
             System.out.print("Enter the number of sides of each die: ");
-            die_sides = in.nextInt();
+            die_sides = Integer.parseInt(in.nextLine());
             System.out.print("Enter the number of dice: ");
-            num_dice = in.nextInt();
+            num_dice = Integer.parseInt(in.nextLine());
             System.out.print("Enter the number of rolls in a round: ");
-            rolls_per_round = in.nextInt();
+            rolls_per_round = Integer.parseInt(in.nextLine());
 
             // update config file
             outFile.println(die_sides);
