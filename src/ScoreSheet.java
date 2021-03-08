@@ -35,14 +35,17 @@ public class ScoreSheet {
         totalScore = 0;
     }
 
+    /**
+     * Method that calculates the scores of each section of the
+     * ScoreSheet
+     */
     public void calcScores() {
         upperSection.calcScores();
         lowerSection.calcScores();
     }
 
     /**
-     * Method that calculates and prints the possible
-     * scores for the current hand.
+     * Method that prints out the ScoreSheet
      */
     public void printSheet() {
         int upperLength = upperSection.getLength();
@@ -98,6 +101,12 @@ public class ScoreSheet {
         return length;
     }
 
+    /**
+     * Method that gives the score at a given line of the ScoreSheet
+     *
+     * @param line - line to search
+     * @return - the score at the given line
+     */
     public int scoreAt(int line) {
         if (line >= 0 && line < upperSection.getLength())
             return upperSection.getScore(line);
@@ -108,9 +117,14 @@ public class ScoreSheet {
                     + length + ")");
             return -2;
         }
-
     }
 
+    /**
+     * Method that gives the score at a given line of the ScoreSheet
+     *
+     * @param line - line to search
+     * @return - the score at the given line
+     */
     public boolean setScore(int line, int score) {
         if (line >= 0 && line < upperSection.getLength())
             return (upperSection.setScore(line, score));
@@ -123,6 +137,10 @@ public class ScoreSheet {
         }
     }
 
+    /**
+     * Method that calculates and prints the scores of the upper and
+     * lower sections, and the total score for the scoresheet
+     */
     public void printScore() {
         upperSection.printUpperScore();
         lowerSection.printLowerScore();

@@ -92,6 +92,11 @@ public class Config {
         }
     }
 
+    /**
+     * Method that determines whether a string contains an integer
+     *
+     * @param s - String to check if it is an integer
+     */
     private boolean isInteger(String s){
         try {Integer.parseInt(s);}
         catch(NumberFormatException e){return false;}

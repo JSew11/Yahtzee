@@ -25,6 +25,9 @@ public class Yahtzee {
         }
     }
 
+    /**
+     * Method to play a game of single player yahtzee
+     */
     private static void playYahtzee(){
         Config c = new Config("..\\yahtzeeConfig.txt");
         Hand h = new Hand(c);
@@ -82,6 +85,12 @@ public class Yahtzee {
         updateScores(possible, actual);
     }
 
+    /**
+     * Method for determining if the game of Yahtzee is over
+     *
+     * @param actual - ScoreSheet object used to check if
+     *                 the game is over
+     */
     private static boolean gameOver(ScoreSheet actual){
         for(int i = 0; i < actual.getLength(); ++i){
             if(actual.scoreAt(i) == -1)
@@ -90,6 +99,15 @@ public class Yahtzee {
         return true;
     }
 
+    /**
+     * Method to update the game's ScoreSheet based on the current
+     * turn's hand
+     *
+     * @param possible - ScoreSheet containing the possible scores
+     *                   from the current turn
+     * @param actual - ScoreSheet containing the scores from the
+     *                 previous turns
+     */
     private static void updateScores(ScoreSheet possible, ScoreSheet actual){
         Scanner in = new Scanner(System.in);
         boolean scoreSet = false;

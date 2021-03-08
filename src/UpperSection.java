@@ -99,6 +99,9 @@ public class UpperSection {
      */
     public int getLength(){ return length;}
 
+    /**
+     * Method that prints the score of the upper section
+     */
     public void printUpperScore(){
         int sum = 0;
         for(int i = 0; i < length; ++i)
@@ -113,5 +116,10 @@ public class UpperSection {
         score = sum;
     }
 
+    /**
+     * Method that gives the score of the upper section object
+     *
+     * @return - score of the upper section object
+     */
     public int getUpperScore(){ return score;}
 }

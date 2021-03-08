@@ -228,6 +228,9 @@ public class LowerSection {
         return sum;
     }
 
+    /**
+     * Method that prints the score of the lower section
+     */
     public void printLowerScore(){
         int sum = 0;
         for(int i = 0; i < length; ++i)
@@ -236,5 +239,10 @@ public class LowerSection {
         score = sum;
     }
 
+    /**
+     * Method that gives the score of the lower section
+     *
+     * @return - score of the lower section
+     */
     public int getLowerScore(){ return score;}
 }
