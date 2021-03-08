@@ -32,7 +32,7 @@ public class Config {
         getConfig(filename);
         System.out.print("Enter 'y' if you would like to change the game configuration: ");
         String cont = in.next();
-        if(cont.equals("y")){ setConfig(filename, in);}
+        if(cont.equals("y")){ setConfig(filename);}
         System.out.println();
     }
 
@@ -63,19 +63,25 @@ public class Config {
      *
      * @param filename String containing the name of the
      *                 config file
-     * @param in Scanner to read the input from the command
-     *           prompt
      */
-    private void setConfig(String filename, Scanner in){
+    private void setConfig(String filename){
         try{
+            Scanner in = new Scanner(System.in);
+            String input;
             // read input from console
             PrintStream outFile = new PrintStream(new File(filename));
             System.out.print("Enter the number of sides of each die: ");
-            die_sides = Integer.parseInt(in.nextLine());
+            input = in.nextLine();
+            if(isInteger(input)){die_sides = Integer.parseInt(input);}
+            else System.out.println("Invalid input (please enter an integer value)");
             System.out.print("Enter the number of dice: ");
-            num_dice = Integer.parseInt(in.nextLine());
+            input = in.nextLine();
+            if(isInteger(input)){num_dice = Integer.parseInt(input);}
+            else System.out.println("Invalid input (please enter an integer value)");
             System.out.print("Enter the number of rolls in a round: ");
-            rolls_per_round = Integer.parseInt(in.nextLine());
+            input = in.nextLine();
+            if(isInteger(input)){rolls_per_round = Integer.parseInt(input);}
+            else System.out.println("Invalid input (please enter an integer value)");
 
             // update config file
             outFile.println(die_sides);
@@ -84,6 +90,13 @@ public class Config {
         } catch(FileNotFoundException e){
             System.out.println("Config file was not found.");
         }
+    }
+
+    private boolean isInteger(String s){
+        try {Integer.parseInt(s);}
+        catch(NumberFormatException e){return false;}
+        catch(NullPointerException e){return false;}
+        return true;
     }
 
     /**
