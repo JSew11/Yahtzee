@@ -9,6 +9,7 @@
 
 public class LowerSection {
     private int length = 7;
+    int score;
     private Hand hand;
     private Config config;
     private int lowerSection[];
@@ -26,7 +27,11 @@ public class LowerSection {
     public LowerSection(Hand hand, Config config){
         this.hand = hand;
         this.config = config;
+        int score = 0;
         lowerSection = new int[length];
+
+        for(int i = 0; i < length; ++i)
+            lowerSection[i] = -1;
     }
 
     /**
@@ -39,8 +44,7 @@ public class LowerSection {
         fullHouseCalc();
         smallStraightCalc();
         largeStraightCalc();
-        if(yahtzeeCalc()) lowerSection[5] = 50;
-        else lowerSection[5] = 0;
+        if(isYahtzee()) lowerSection[5] = 50;
         chanceCalc();
     }
 
@@ -51,11 +55,23 @@ public class LowerSection {
      * @param line - the line to set the score in
      * @param score - the score to set at the given line
      */
-    public void setScore(int line, int score){
+    public boolean setScore(int line, int score){
         if(line >= 0 && line < length)
-            lowerSection[line] = score;
-        else System.out.println("Invalid Lower Section line (please enter 0-"
-                                + (length-1) + ")");
+            if(lowerSection[line] == -1) {
+                if (score == -1) lowerSection[line] = 0;
+                else lowerSection[line] = score;
+                return true;
+            }
+            else{
+                System.out.println("There is already a score here (please enter another line 0-"
+                        + (length-1) + ")");
+                return false;
+            }
+        else{
+            System.out.println("Invalid Lower Section line (please enter 0-"
+                    + (length-1) + ")");
+            return false;
+        }
     }
 
     /**
@@ -98,7 +114,8 @@ public class LowerSection {
                 }
             }
         }
-        lowerSection[0] = sum;
+        if(sum != 0)
+            lowerSection[0] = sum;
     }
 
     /**
@@ -120,7 +137,8 @@ public class LowerSection {
                 }
             }
         }
-        lowerSection[1] = sum;
+        if(sum != 0)
+            lowerSection[1] = sum;
     }
 
     /**
@@ -159,6 +177,19 @@ public class LowerSection {
                 hand.dieAt(3).getValue() == hand.dieAt(4).getValue()-1){
             lowerSection[3] = 30;
         }
+        // cases where two dice are the same within the straight
+        else if(hand.dieAt(0).getValue() == hand.dieAt(1).getValue()-1 &&
+                hand.dieAt(1).getValue() == hand.dieAt(2).getValue() &&
+                hand.dieAt(2).getValue() == hand.dieAt(3).getValue()-1 &&
+                hand.dieAt(3).getValue() == hand.dieAt(4).getValue()-1){
+            lowerSection[3] = 30;
+        }
+        else if(hand.dieAt(0).getValue() == hand.dieAt(1).getValue()-1 &&
+                hand.dieAt(1).getValue() == hand.dieAt(2).getValue()-1 &&
+                hand.dieAt(2).getValue() == hand.dieAt(3).getValue() &&
+                hand.dieAt(3).getValue() == hand.dieAt(4).getValue()-1) {
+            lowerSection[3] = 30;
+        }
     }
 
     /**
@@ -166,10 +197,10 @@ public class LowerSection {
      * straight in the current hand.
      */
     private void largeStraightCalc(){
-        if(hand.dieAt(0).getValue() == hand.dieAt(1).getValue()-1 &&
-                hand.dieAt(1).getValue() == hand.dieAt(2).getValue()-1 &&
-                hand.dieAt(2).getValue() == hand.dieAt(3).getValue()-1 &&
-                hand.dieAt(3).getValue() == hand.dieAt(4).getValue()-1){
+        if (hand.dieAt(0).getValue() == hand.dieAt(1).getValue() - 1 &&
+                hand.dieAt(1).getValue() == hand.dieAt(2).getValue() - 1 &&
+                hand.dieAt(2).getValue() == hand.dieAt(3).getValue() - 1 &&
+                hand.dieAt(3).getValue() == hand.dieAt(4).getValue() - 1) {
             lowerSection[4] = 40;
         }
     }
@@ -180,7 +211,7 @@ public class LowerSection {
      * @return boolean value that says whether or not the current
      *         hand is a yahtzee
      */
-    private boolean yahtzeeCalc() {
+    private boolean isYahtzee() {
         int val = hand.dieAt(0).getValue();
         for (int i = 1; i < config.getNum_dice(); ++i) {
             if (val != hand.dieAt(i).getValue()) return false;
@@ -209,4 +240,14 @@ public class LowerSection {
         }
         return sum;
     }
+
+    public void printLowerScore(){
+        int sum = 0;
+        for(int i = 0; i < length; ++i)
+            sum += lowerSection[i];
+        System.out.println("Lower Section Score = " + sum);
+        score = sum;
+    }
+
+    public int getLowerScore(){ return score;}
 }

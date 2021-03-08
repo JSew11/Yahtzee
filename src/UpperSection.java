@@ -8,6 +8,7 @@
  */
 
 public class UpperSection {
+    private int score;
     private int length;
     private Hand hand;
     private Config config;
@@ -27,10 +28,11 @@ public class UpperSection {
         this.config = config;
         this.hand = hand;
         length = config.getDie_sides();
+        score = 0;
         upperSection = new int[length];
 
-        for(int i: upperSection)
-            i = -1;
+        for(int i = 0; i < length; ++i)
+            upperSection[i] = -1;
     }
 
     /**
@@ -44,7 +46,8 @@ public class UpperSection {
                 if(hand.dieAt(j).getValue() == i+1)
                     sum += i+1;
             }
-            upperSection[i] = sum;
+            if(sum != 0)
+                upperSection[i] = sum;
         }
     }
 
@@ -55,11 +58,22 @@ public class UpperSection {
      * @param line - the line to set the score in
      * @param score - the score to set at the given line
      */
-    public void setScore(int line, int score){
+    public boolean setScore(int line, int score){
         if(line >= 0 && line < length)
-            upperSection[line] = score;
-        else System.out.println("Invalid Upper Section line (please enter 0-"
-                                + (length-1) + ")");
+            if(upperSection[line] == -1) {
+                if (score == -1) upperSection[line] = 0;
+                else upperSection[line] = score;
+                return true;
+            }
+            else{
+                System.out.println("There is already a score here (please enter another line)");
+                return false;
+            }
+        else {
+            System.out.println("Invalid Upper Section line (please enter 0-"
+                    + (length-1) + ")");
+            return false;
+        }
     }
 
     /**
@@ -84,4 +98,20 @@ public class UpperSection {
      * @return - returns the length of the upper section
      */
     public int getLength(){ return length;}
+
+    public void printUpperScore(){
+        int sum = 0;
+        for(int i = 0; i < length; ++i)
+            sum += upperSection[i];
+        System.out.print("Upper Section Score = " + sum + " + ");
+        if(sum >= 63){
+            System.out.print("63");
+            sum += 63;
+        }
+        else System.out.print("0");
+        System.out.println(" = " + sum);
+        score = sum;
+    }
+
+    public int getUpperScore(){ return score;}
 }

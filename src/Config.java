@@ -18,6 +18,7 @@ public class Config {
     private int die_sides;
     private int num_dice;
     private int rolls_per_round;
+
     /**
      * Constructor that creates a new Config object using the
      * data of a provided config file, and changes the config
@@ -32,6 +33,7 @@ public class Config {
         System.out.print("Enter 'y' if you would like to change the game configuration: ");
         String cont = in.next();
         if(cont.equals("y")){ setConfig(filename, in);}
+        System.out.println();
     }
 
     /**
